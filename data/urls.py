@@ -1,3 +1,3 @@
 BASE_URL = "https://qa-scooter.praktikum-services.ru/"
-DZEN_URL_PART = "dzen.ru"
-YANDEX_URL_PART = "yandex"
+DZEN_REDIRECT_URL = "https://dzen.ru/?yredirect=true"
+DZEN_HOST = "dzen.ru"

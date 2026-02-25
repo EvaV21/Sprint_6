@@ -1,51 +1,34 @@
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-
 from pages.base_page import BasePage
-
+import locators.main_page_locators as L
 
 class MainPage(BasePage):
-    ORDER_TOP = (By.CSS_SELECTOR, "button.Button_Button__ra12g")
-    ORDER_BOTTOM = (By.XPATH, "//div[contains(@class,'Home_FinishButton')]/button")
 
-    COOKIE_BUTTON = (By.ID, "rcc-confirm-button")
+    @allure.step("Принять cookies")
+    def accept_cookies(self):
+        self.accept_cookies_if_present(L.COOKIE_BUTTON)
 
-    SCOOTER_LOGO = (By.CSS_SELECTOR, "a.Header_LogoScooter__3lsAR")
-    YANDEX_LOGO = (By.CSS_SELECTOR, "a.Header_LogoYandex__3TSOI")
+    @allure.step("Нажать кнопку Заказать (верхняя)")
+    def click_order_top(self):
+        self.click(L.ORDER_TOP)
 
-    @staticmethod
-    def FAQ_QUESTION(i: int):
-        return (By.ID, f"accordion__heading-{i}")
+    @allure.step("Нажать кнопку Заказать (нижняя)")
+    def click_order_bottom(self):
+        self.click(L.ORDER_BOTTOM)
 
-    @staticmethod
-    def FAQ_ANSWER(i: int):
-        return (By.ID, f"accordion__panel-{i}")
+    @allure.step("Нажать лого Самокат")
+    def click_scooter_logo(self):
+        self.click(L.SCOOTER_LOGO)
 
-    @allure.step("Принять cookies, если баннер есть")
-    def accept_cookies_if_present(self):
-        try:
-            self.wait.until(EC.element_to_be_clickable(self.COOKIE_BUTTON)).click()
-        except TimeoutException:
-            pass
+    @allure.step("Нажать лого Яндекс")
+    def click_yandex_logo(self):
+        self.click(L.YANDEX_LOGO)
 
     @allure.step("Открыть вопрос FAQ #{i}")
     def open_faq_question(self, i: int):
-        self.click(self.FAQ_QUESTION(i))
+        self.accept_cookies()          # ← добавить
+        self.js_click(L.FAQ_QUESTION(i))  # ← лучше js_click, чтобы не ловить перехват
 
     @allure.step("Получить ответ FAQ #{i}")
     def get_faq_answer(self, i: int) -> str:
-        return self.get_text(self.FAQ_ANSWER(i))
-
-    def click_order_top(self):
-        self.click(self.ORDER_TOP)
-
-    def click_order_bottom(self):
-        self.click(self.ORDER_BOTTOM)
-
-    def click_scooter_logo(self):
-        self.click(self.SCOOTER_LOGO)
-
-    def click_yandex_logo(self):
-        self.click(self.YANDEX_LOGO)
+        return self.get_text(L.FAQ_ANSWER(i))

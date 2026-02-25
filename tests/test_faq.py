@@ -3,6 +3,7 @@ import allure
 from pages.main_page import MainPage
 from data.urls import BASE_URL
 
+
 FAQ_CASES = [
     (0, "Сутки — 400 рублей"),
     (1, "Пока что у нас так"),
@@ -14,10 +15,13 @@ FAQ_CASES = [
     (7, "Московской области"),
 ]
 
+
 @allure.epic("Самокат")
 @allure.feature("FAQ")
 @pytest.mark.faq
 class TestFAQ:
+
+    @allure.title("Проверка ответа FAQ")
     @pytest.mark.parametrize("index, expected_part", FAQ_CASES)
     def test_faq_answer_opens(self, driver, wait, index, expected_part):
         page = MainPage(driver, wait)

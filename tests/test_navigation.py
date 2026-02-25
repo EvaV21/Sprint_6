@@ -1,12 +1,9 @@
 import allure
 import pytest
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.main_page import MainPage
-from data.urls import BASE_URL
-
-DZEN_REDIRECT_URL = "https://dzen.ru/?yredirect=true"
+from pages.dzen_page import DzenPage
+from data.urls import BASE_URL, DZEN_REDIRECT_URL, DZEN_HOST
 
 
 @allure.epic("Самокат")
@@ -14,30 +11,32 @@ DZEN_REDIRECT_URL = "https://dzen.ru/?yredirect=true"
 @pytest.mark.navigation
 class TestNavigation:
 
+    @allure.title("Клик по лого Самокат возвращает на главную")
     def test_click_scooter_logo_opens_main(self, driver, wait):
         main = MainPage(driver, wait)
-        main.open(BASE_URL)
 
+        main.open(BASE_URL)
+        main.accept_cookies()
         main.click_order_top()
         main.click_scooter_logo()
 
-        wait.until(EC.url_to_be(BASE_URL))
-        assert driver.current_url == BASE_URL
+        main.wait_url_to_be(BASE_URL)
+        assert main.current_url() == BASE_URL
 
+    @allure.title("Клик по лого Яндекс открывает Дзен (через редирект)")
     def test_click_yandex_logo_opens_dzen_via_redirect(self, driver, wait):
         main = MainPage(driver, wait)
-        main.open(BASE_URL)
-        main.accept_cookies_if_present()
+        dzen = DzenPage(driver, wait)
 
+        main.open(BASE_URL)
+        main.accept_cookies()
         main.click_yandex_logo()
 
-        wait.until(EC.number_of_windows_to_be(2))
-        driver.switch_to.window(driver.window_handles[-1])
+        main.wait_number_of_windows(2)
+        dzen.switch_to_new_tab()
 
-        long_wait = WebDriverWait(driver, 30)
+        # принудительно уводим на стабильный редирект
+        dzen.go_to(DZEN_REDIRECT_URL)
+        dzen.wait_url_contains(DZEN_HOST)
 
-        long_wait.until(lambda d: "yandex" in d.current_url or "dzen" in d.current_url or "ya.ru" in d.current_url)
-
-        driver.get(DZEN_REDIRECT_URL)
-        long_wait.until(lambda d: "dzen.ru" in d.current_url)
-        assert "dzen.ru" in driver.current_url
+        assert DZEN_HOST in dzen.current_url()
