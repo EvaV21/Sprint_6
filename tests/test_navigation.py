@@ -36,10 +36,8 @@ class TestNavigation:
 
         long_wait = WebDriverWait(driver, 30)
 
-        # В Firefox может остаться yandex.ru, в Chrome часто сразу dzen.ru
         long_wait.until(lambda d: "yandex" in d.current_url or "dzen" in d.current_url or "ya.ru" in d.current_url)
 
-        # Требование задания: через редирект открывается главная страница Дзена
         driver.get(DZEN_REDIRECT_URL)
         long_wait.until(lambda d: "dzen.ru" in d.current_url)
         assert "dzen.ru" in driver.current_url

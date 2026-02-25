@@ -22,14 +22,12 @@ def driver(request):
 
     if browser == "firefox":
         options = FirefoxOptions()
-        # options.add_argument("-headless")  # раскомментируй при необходимости
-        service = FirefoxService()  # geckodriver берётся из PATH
+        service = FirefoxService()  
         driver = webdriver.Firefox(service=service, options=options)
 
     elif browser == "chrome":
         options = ChromeOptions()
-        # options.add_argument("--headless")  # если понадобится
-        service = ChromeService()  # chromedriver должен быть в PATH
+        service = ChromeService() 
         driver = webdriver.Chrome(service=service, options=options)
 
     else:
