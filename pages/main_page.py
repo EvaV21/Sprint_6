@@ -26,8 +26,8 @@ class MainPage(BasePage):
 
     @allure.step("Открыть вопрос FAQ #{i}")
     def open_faq_question(self, i: int):
-        self.accept_cookies()          # ← добавить
-        self.js_click(L.FAQ_QUESTION(i))  # ← лучше js_click, чтобы не ловить перехват
+        self.accept_cookies()         
+        self.js_click(L.FAQ_QUESTION(i))  
 
     @allure.step("Получить ответ FAQ #{i}")
     def get_faq_answer(self, i: int) -> str:

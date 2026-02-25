@@ -35,7 +35,6 @@ class TestNavigation:
         main.wait_number_of_windows(2)
         dzen.switch_to_new_tab()
 
-        # принудительно уводим на стабильный редирект
         dzen.go_to(DZEN_REDIRECT_URL)
         dzen.wait_url_contains(DZEN_HOST)
 

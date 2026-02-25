@@ -67,7 +67,6 @@ class OrderPage(BasePage):
 
     @allure.step("Отправить заказ и подтвердить")
     def submit_order(self):
-        # если Firefox иногда не кликает — можно заменить на js_click
         self.js_click(L.ORDER_BUTTON)
         self.is_visible(L.CONFIRM_YES)
         self.js_click(L.CONFIRM_YES)
