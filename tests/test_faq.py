@@ -17,7 +17,7 @@ class TestFAQ:
         page = MainPage(driver, wait)
         page.open(BASE_URL)
 
-        page.accept_cookies()  # важно, чтобы куки-баннер не перекрывал FAQ
+        page.accept_cookies()  #
         page.open_faq_question(index)
         answer = page.get_faq_answer(index)
 
