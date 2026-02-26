@@ -2,22 +2,12 @@ import pytest
 import allure
 from pages.main_page import MainPage
 from data.urls import BASE_URL
-
-
-FAQ_CASES = [
-    (0, "Сутки — 400 рублей"),
-    (1, "Пока что у нас так"),
-    (2, "Допустим, вы оформляете заказ"),
-    (3, "Только начиная с завтрашнего дня"),
-    (4, "Пока что нет"),
-    (5, "Самокат приезжает к вам"),
-    (6, "Штрафа не будет"),
-    (7, "Московской области"),
-]
+from data.faq_data import FAQ_CASES
 
 
 @allure.epic("Самокат")
 @allure.feature("FAQ")
+@allure.title("Проверка ответов в FAQ")
 @pytest.mark.faq
 class TestFAQ:
 
@@ -27,6 +17,7 @@ class TestFAQ:
         page = MainPage(driver, wait)
         page.open(BASE_URL)
 
+        page.accept_cookies()  # важно, чтобы куки-баннер не перекрывал FAQ
         page.open_faq_question(index)
         answer = page.get_faq_answer(index)
 
